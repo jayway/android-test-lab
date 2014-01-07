@@ -16,6 +16,8 @@ public class MainActivity extends Activity {
         String rootUrl = "url";
         logger.init(this, rootUrl);
 
+        logger.log("type").with("key", "value").submit();
+
     }
 
 }
