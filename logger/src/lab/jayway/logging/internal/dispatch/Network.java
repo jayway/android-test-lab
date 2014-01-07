@@ -15,13 +15,10 @@ public class Network implements LoggDestination {
 
     private final String mRootUrl;
 
-    private final String mApiKey;
-
     private HttpURLConnection connection;
 
-    public Network(String rootUrl, String apiKey) {
+    public Network(String rootUrl) {
         mRootUrl = rootUrl;
-        mApiKey = apiKey;
     }
 
     public OutputStream open() throws IOException {
@@ -29,7 +26,6 @@ public class Network implements LoggDestination {
             Log.d(Config.LOG_TAG, "Open a connection to: " + mRootUrl);
         }
         connection = (HttpURLConnection)new URL(mRootUrl).openConnection();
-        connection.setRequestProperty("Api-Key", mApiKey);
         connection.setDoOutput(true);
         return connection.getOutputStream();
     }

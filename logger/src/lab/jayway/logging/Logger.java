@@ -39,18 +39,9 @@ public class Logger {
      * @param context The {@link Context} used by the {@link AbstractQueue} for
      *            {@link SQLiteDatabase} access.
      * @param rootUrl the rootUrl.
-     * @param apiKey the apiKey.
-     * @param clientName the name of the client.
-     * @param clientVersion the version of the client.
-     * @param deviceId a id identifying the device or null.
      */
-    public void init(Context context, String rootUrl, String apiKey, String clientName,
-            String clientVersion, String deviceId) {
-        SharedPreferencesUtil.setAPIKey(context, apiKey);
+    public void init(Context context, String rootUrl) {
         SharedPreferencesUtil.setRootUrl(context, rootUrl);
-        SharedPreferencesUtil.setClientName(context, clientName);
-        SharedPreferencesUtil.setClientVersion(context, clientVersion);
-        SharedPreferencesUtil.setDeviceId(context, deviceId);
         Queue.init(context);
         startService(context);
     }

@@ -23,21 +23,11 @@ public class SharedPreferencesUtil {
      */
     private static final long DEFAULT_MIN_WAIT_WHEN_ON_WIFI_IN_MS = 21 * 60 * 60 * 1000;
 
-    private static final String API_KEY = "api_key";
-
     private static final String ROOT_URL = "root_url";
-
-    private static final String CLIENT_NAME = "client_name";
-
-    private static final String CLIENT_VERSION = "client_version";
 
     private static final String MAX_WAIT_FOR_WIFI = "max_wait_for_WIFI";
 
     private static final String MIN_WAIT_WHEN_ON_WIFI = "min_wait_when_on_WIFI";
-
-    private static final String RANDOM_ID = "random_id";
-
-    private static final String DEVICE_ID = "device_id";
 
     /**
      * Clears the SharedPreferences.
@@ -54,19 +44,6 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * Stores the API-key.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @param apiKey The API-key to store.
-     */
-    public static void setAPIKey(Context context, String apiKey) {
-        if (!Utils.isEmpty(apiKey)) {
-            savePreferences(context, API_KEY, apiKey);
-        }
-    }
-
-    /**
      * Stores the root URL.
      *
      * @param context {@link Context} for reading/writing the
@@ -76,32 +53,6 @@ public class SharedPreferencesUtil {
     public static void setRootUrl(Context context, String rootUrl) {
         if (!Utils.isEmpty(rootUrl)) {
             savePreferences(context, ROOT_URL, rootUrl);
-        }
-    }
-
-    /**
-     * Stores the client name.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @param clientName The client name to store.
-     */
-    public static void setClientName(Context context, String clientName) {
-        if (!Utils.isEmpty(clientName)) {
-            savePreferences(context, CLIENT_NAME, clientName);
-        }
-    }
-
-    /**
-     * Stores the client version.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @param clientVersion The client version to store.
-     */
-    public static void setClientVersion(Context context, String clientVersion) {
-        if (!Utils.isEmpty(clientVersion)) {
-            savePreferences(context, CLIENT_VERSION, clientVersion);
         }
     }
 
@@ -132,29 +83,6 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * Sets the user id.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @param deviceId the id identifying the device.
-     */
-    public static void setDeviceId(Context context, String deviceId) {
-        savePreferences(context, DEVICE_ID, deviceId);
-
-    }
-
-    /**
-     * Reads and returns the API-key.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @return apiKey The API-key.
-     */
-    public static String getAPIKey(Context context) {
-        return loadSavedPreferencesString(context, API_KEY);
-    }
-
-    /**
      * Reads and returns the root URL.
      *
      * @param context {@link Context} for reading/writing the
@@ -166,29 +94,7 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * Reads and returns the client name.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @return the client name.
-     */
-    public static String getClientName(Context context) {
-        return loadSavedPreferencesString(context, CLIENT_NAME);
-    }
-
-    /**
-     * Reads and returns the client version.
-     *
-     * @param context {@link Context} for reading/writing the
-     *            {@link SharedPreferences}'s.
-     * @return the client version.
-     */
-    public static String getClientVersion(Context context) {
-        return loadSavedPreferencesString(context, CLIENT_VERSION);
-    }
-
-    /**
-     * Reads and returns the max wait for WIFI.
+     * /** Reads and returns the max wait for WIFI.
      *
      * @param context {@link Context} for reading/writing the
      *            {@link SharedPreferences}'s.
@@ -208,34 +114,6 @@ public class SharedPreferencesUtil {
     public static long getMinWaitWhenOnWIFI(Context context) {
         return loadSavedPreferencesLong(context, MIN_WAIT_WHEN_ON_WIFI,
                 DEFAULT_MIN_WAIT_WHEN_ON_WIFI_IN_MS);
-    }
-
-    /**
-     * Gets the randomly generated id. If this method has never been called
-     * before, it will generate an id and save it for future use.
-     *
-     * @param context a {@link Context} used to access the
-     *            {@link SharedPreferences}
-     * @return the user id.
-     */
-    public static String getRandomId(Context context) {
-        String randomId = loadSavedPreferencesString(context, RANDOM_ID);
-        if (randomId == null) {
-            randomId = Long.toHexString((long) (Math.random() * Long.MAX_VALUE));
-            savePreferences(context, RANDOM_ID, randomId);
-        }
-        return randomId;
-    }
-
-    /**
-     * Gets the device id.
-     *
-     * @param context a {@link Context} used to access the
-     *            {@link SharedPreferences}
-     * @return the device id.
-     */
-    public static String getDeviceId(Context context) {
-        return loadSavedPreferencesString(context, DEVICE_ID);
     }
 
     private static void savePreferences(Context context, String key, String value) {

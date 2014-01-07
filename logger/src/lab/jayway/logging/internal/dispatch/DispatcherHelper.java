@@ -15,8 +15,6 @@ import java.io.OutputStreamWriter;
 
 import lab.jayway.logging.internal.LogEntry;
 import lab.jayway.logging.util.PhoneInfo;
-import lab.jayway.logging.util.SharedPreferencesUtil;
-import lab.jayway.logging.util.Utils;
 
 /**
  * Handles networking/uploading of Log data to the server.
@@ -25,12 +23,6 @@ public class DispatcherHelper {
 
     private static final Gson mGson = new Gson();
 
-    private static final String CLIENT_NAME = "client_name";
-
-    private static final String CLIENT_VERSION = "client_version";
-
-    private static final String DEVICE_ID = "device_id";
-
     private static final String MODEL = "model";
 
     private static final String MCC = "mcc";
@@ -38,8 +30,6 @@ public class DispatcherHelper {
     private static final String MNC = "mnc";
 
     private static final String LOCALE = "locale";
-
-    private static final String RANDOM_ID = "random_id";
 
     private static final String DATA = "data";
 
@@ -70,13 +60,7 @@ public class DispatcherHelper {
 
     private void sendSessionValues(Context context) throws IOException {
         PhoneInfo phoneInfo = new PhoneInfo(context);
-        mJsonWriter.name(CLIENT_NAME).value(SharedPreferencesUtil.getClientName(context));
 
-        mJsonWriter.name(CLIENT_VERSION).value(SharedPreferencesUtil.getClientVersion(context));
-        String deviceId = SharedPreferencesUtil.getDeviceId(context);
-        if (!Utils.isEmpty(deviceId)) {
-            mJsonWriter.name(DEVICE_ID).value(deviceId);
-        }
         mJsonWriter.name(MODEL).value(Build.MODEL);
         String mcc = phoneInfo.getMcc();
         if (mcc != null) {
@@ -87,7 +71,6 @@ public class DispatcherHelper {
             mJsonWriter.name(MNC).value(mnc);
         }
         mJsonWriter.name(LOCALE).value(phoneInfo.getLocale());
-        mJsonWriter.name(RANDOM_ID).value(SharedPreferencesUtil.getRandomId(context));
     }
 
     /**
