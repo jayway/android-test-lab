@@ -3,7 +3,20 @@ Android Test Lab
 
 TDD with Fizz-Buzz
 ------------------
+The goal of this exercise is to try out TDD and pair programing. This will be done in teams of two people taking turns writing tests and the code to make failing tests pass.
 
+The problem that you will work on to get the exercise going is generaly known as Fizz-Buzz, a short description of Fizz-Buzz can be found below.
+
+Fizz-Buzz:  
+For n in the range 1 to 100:  
+if n is dividable by 3 and 5: return with 'FizzBuzz'  
+else if n is dividable by 3: return with 'Fizz'  
+else if n is dividable by 5: return with 'Buzz'  
+else return n  
+
+Take turns doing one "Test-driven development cycle" each until a complete soulution to Fizz-Buzz have been acheived.
+
+http://en.wikipedia.org/wiki/Test-driven_development#Test-driven_development_cycle
 
 Refactoring for Testability Lab
 -------------------------------
