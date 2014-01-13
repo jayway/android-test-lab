@@ -14,7 +14,11 @@ else if n is dividable by 3: return with 'Fizz'
 else if n is dividable by 5: return with 'Buzz'  
 else return n  
 
-Take turns doing one "Test-driven development cycle" each until a complete soulution to Fizz-Buzz have been acheived.
+We want you to implement the following interface:
+
+String[] getFizzbuzz(int[] numbers);
+
+Take turns doing one "Test-driven development cycle" each until a complete implementation to the above interface have been achived.
 
 http://en.wikipedia.org/wiki/Test-driven_development#Test-driven_development_cycle
 
