@@ -8,7 +8,7 @@ The goal of this exercise is to try out TDD and pair programing. This will be do
 The problem that you will work on to get the exercise going is generaly known as Fizz-Buzz, a short description of Fizz-Buzz can be found below.
 
 Fizz-Buzz:  
-For n in the range 1 to 100:  
+For n in the range 1 to 99:  
 if n is dividable by 3 and 5: return with 'FizzBuzz'  
 else if n is dividable by 3: return with 'Fizz'  
 else if n is dividable by 5: return with 'Buzz'  
