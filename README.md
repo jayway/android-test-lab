@@ -1,6 +1,10 @@
 Android Test Lab
 ================
 
+TDD with kata
+-------------
+http://osherove.com/tdd-kata-1/
+
 TDD with Fizz-Buzz
 ------------------
 The goal of this exercise is to try out TDD and pair programing. This will be done in teams of two people taking turns writing tests and the code to make failing tests pass.
