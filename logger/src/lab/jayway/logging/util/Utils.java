@@ -27,7 +27,7 @@ import lab.jayway.logging.internal.Config;
  * <h1>Utilities</h1>
  * <p>
  * This is a tool box for common, non-application-logic set of tasks used by the
- * Sony Logger. Typically containing methods for validating strings, lists
+ * Logger. Typically containing methods for validating strings, lists
  * or maps before using them. Validation would include simple null checks and
  * length integrity tests. There are also methods for gracefully closing streams
  * (checking for null and catching those rarely thrown exceptions).

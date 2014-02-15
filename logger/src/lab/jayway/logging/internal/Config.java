@@ -13,5 +13,5 @@ public class Config {
     /**
      * MUST be used in ALL Log.x(LOG_TAG... statements within the logger.
      */
-    public static final String LOG_TAG = "Sony Logger";
+    public static final String LOG_TAG = "Jayway Logger Lab";
 }
