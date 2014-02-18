@@ -12,6 +12,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
 android {
     compileSdkVersion 19
     buildToolsVersion "19.0.1"
