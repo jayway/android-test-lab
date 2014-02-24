@@ -1,7 +1,6 @@
 package lab.jayway.logging.service;
 
-import lab.jayway.logging.internal.db.DatabaseHelper;
-import lab.jayway.logging.internal.db.LogEntryHelper;
+import lab.jayway.logging.internal.db.LogDb;
 import lab.jayway.logging.internal.dispatch.Dispatcher;
 import lab.jayway.logging.internal.dispatch.LoggDestination;
 import lab.jayway.logging.internal.dispatch.Network;
@@ -11,7 +10,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 
 public class LogUploader {
 	
@@ -19,8 +17,11 @@ public class LogUploader {
 
 	private final Context context;
 
-	public LogUploader(Context context) {
+	private LogDb logDb;
+
+	public LogUploader(Context context, LogDb logDb) {
 		this.context = context;
+		this.logDb = logDb;
 	}
 	
 	public void uploadIfNecessary(boolean startedFromAlarmManager) {
@@ -30,13 +31,12 @@ public class LogUploader {
 
         LoggDestination destination = new Network(rootUrl);
         Dispatcher dispatcher = new Dispatcher(destination);
+        
+        logDb.open();
 
         // if automaticServiceCall && db empty -> done, exit
-        DatabaseHelper databaseHelper = new DatabaseHelper(context);
-        SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        		
         if (startedFromAlarmManager) {
-            if (LogEntryHelper.isEmpty(db)) {
+            if (logDb.isEmpty()) {
                 // If this was a scheduled start and the database is empty we
                 // don't do anything.
                 return;
@@ -44,8 +44,8 @@ public class LogUploader {
         }
 
         // if last upload timestamp < 1 day ago -> schedule, exit
-        if (System.currentTimeMillis() - LogEntryHelper.getOldestTimestamp(db) < ONE_DAY) {
-            scheduleNextAutomaticCheck(LogEntryHelper.getOldestTimestamp(db));
+        if (System.currentTimeMillis() - logDb.getOldestTimeStamp() < ONE_DAY) {
+            scheduleNextAutomaticCheck(logDb.getOldestTimeStamp());
             return;
         }
 
@@ -53,7 +53,7 @@ public class LogUploader {
         if (phoneInfo.isOnWifi()) {
             dispatcher.dispatch(context);
         } else {
-            LogEntryHelper.deleteAllLogEntries(db);
+            logDb.dropAll();
         }
 	}
 	

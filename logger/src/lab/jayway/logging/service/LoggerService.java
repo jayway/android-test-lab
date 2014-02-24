@@ -1,6 +1,7 @@
 
 package lab.jayway.logging.service;
 
+import lab.jayway.logging.internal.db.LogDb;
 import android.app.IntentService;
 import android.content.Intent;
 
@@ -14,8 +15,8 @@ public class LoggerService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        
-        LogUploader logUploader = new LogUploader(this);
+        LogDb logDb = new LogDb(this);
+        LogUploader logUploader = new LogUploader(this, logDb);
         boolean startedFromAlarmManager = intent.getBooleanExtra(SCHEDULED_SERVICE_CALL, false);
         
         logUploader.uploadIfNecessary(startedFromAlarmManager);
