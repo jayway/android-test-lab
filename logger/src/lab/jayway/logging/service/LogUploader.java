@@ -2,10 +2,7 @@ package lab.jayway.logging.service;
 
 import lab.jayway.logging.internal.db.LogDb;
 import lab.jayway.logging.internal.dispatch.Dispatcher;
-import lab.jayway.logging.internal.dispatch.LoggDestination;
-import lab.jayway.logging.internal.dispatch.Network;
 import lab.jayway.logging.util.PhoneInfo;
-import lab.jayway.logging.util.SharedPreferencesUtil;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,19 +16,18 @@ public class LogUploader {
 
 	private LogDb logDb;
 
-	public LogUploader(Context context, LogDb logDb) {
+	private final PhoneInfo phoneInfo;
+
+	private final Dispatcher dispatcher;
+
+	public LogUploader(Context context, LogDb logDb, PhoneInfo phoneInfo, Dispatcher dispatcher) {
 		this.context = context;
 		this.logDb = logDb;
+		this.phoneInfo = phoneInfo;
+		this.dispatcher = dispatcher;
 	}
 	
 	public void uploadIfNecessary(boolean startedFromAlarmManager) {
-		String rootUrl = SharedPreferencesUtil.getRootUrl(context);
-
-        PhoneInfo phoneInfo = new PhoneInfo(context);
-
-        LoggDestination destination = new Network(rootUrl);
-        Dispatcher dispatcher = new Dispatcher(destination);
-        
         logDb.open();
 
         // if automaticServiceCall && db empty -> done, exit
