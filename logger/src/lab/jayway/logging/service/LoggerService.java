@@ -5,6 +5,7 @@ import lab.jayway.logging.internal.db.LogDb;
 import lab.jayway.logging.internal.dispatch.Dispatcher;
 import lab.jayway.logging.internal.dispatch.LoggDestination;
 import lab.jayway.logging.internal.dispatch.Network;
+import lab.jayway.logging.service.LogUploader.Action;
 import lab.jayway.logging.util.PhoneInfo;
 import lab.jayway.logging.util.SharedPreferencesUtil;
 import android.app.IntentService;
@@ -32,7 +33,20 @@ public class LoggerService extends IntentService {
         LogUploader logUploader = new LogUploader(this, logDb, phoneInfo, dispatcher);
         boolean startedFromAlarmManager = intent.getBooleanExtra(SCHEDULED_SERVICE_CALL, false);
         
-        logUploader.uploadIfNecessary(startedFromAlarmManager);
+        Action action = logUploader.findAction(startedFromAlarmManager);
+        switch (action) {
+		case UPLOAD:
+			logUploader.upload();
+			break;
+		case SCHEDULE:
+			logUploader.scheduleNextAutomaticCheck();
+			break;
+		case CLEAR_DB:
+			logUploader.clearDb();
+			break;
+		default:
+			break;
+		}
     }
 
 

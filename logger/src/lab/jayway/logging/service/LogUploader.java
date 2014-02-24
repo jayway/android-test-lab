@@ -9,8 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 
 public class LogUploader {
-	
-    private static final long ONE_DAY = 24L * 60 * 60 * 1000;
+
+	public enum Action {
+		NOTHING, UPLOAD, SCHEDULE, CLEAR_DB
+	};
+
+	private static final long ONE_DAY = 24L * 60 * 60 * 1000;
 
 	private final Context context;
 
@@ -20,52 +24,73 @@ public class LogUploader {
 
 	private final Dispatcher dispatcher;
 
-	public LogUploader(Context context, LogDb logDb, PhoneInfo phoneInfo, Dispatcher dispatcher) {
+	public LogUploader(Context context, LogDb logDb, PhoneInfo phoneInfo,
+			Dispatcher dispatcher) {
 		this.context = context;
 		this.logDb = logDb;
 		this.phoneInfo = phoneInfo;
 		this.dispatcher = dispatcher;
 	}
-	
-	public void uploadIfNecessary(boolean startedFromAlarmManager) {
-        logDb.open();
 
-        // if automaticServiceCall && db empty -> done, exit
-        if (startedFromAlarmManager) {
-            if (logDb.isEmpty()) {
-                // If this was a scheduled start and the database is empty we
-                // don't do anything.
-                return;
-            }
-        }
+	public Action findAction(boolean startedFromAlarmManager) {
+		logDb.open();
 
-        // if last upload timestamp < 1 day ago -> schedule, exit
-        if (System.currentTimeMillis() - logDb.getOldestTimeStamp() < ONE_DAY) {
-            scheduleNextAutomaticCheck(logDb.getOldestTimeStamp());
-            return;
-        }
+		// if automaticServiceCall && db empty -> done, exit
+		if (startedFromAlarmManager) {
+			if (logDb.isEmpty()) {
+				// If this was a scheduled start and the database is empty we
+				// don't do anything.
+				logDb.close();
+				return Action.NOTHING;
+			}
+		}
 
-        // if on wifi -> upload log
-        if (phoneInfo.isOnWifi()) {
-            dispatcher.dispatch(context);
-        } else {
-            logDb.dropAll();
-        }
+		// if last upload timestamp < 1 day ago -> schedule, exit
+		if (System.currentTimeMillis() - logDb.getOldestTimeStamp() < ONE_DAY) {
+			// scheduleNextAutomaticCheck(logDb.getOldestTimeStamp());
+			logDb.close();
+			return Action.SCHEDULE;
+		}
+
+		// if on wifi -> upload log
+		if (phoneInfo.isOnWifi()) {
+			logDb.close();
+			// dispatcher.dispatch(context);
+			return Action.UPLOAD;
+		} else {
+			logDb.close();
+			// logDb.dropAll();
+			return Action.CLEAR_DB;
+		}
 	}
-	
-    private void scheduleNextAutomaticCheck(long firstLogEntryTimestamp) {
-        long now = System.currentTimeMillis();
-        long daysSinceFirstLogEntry = (now - firstLogEntryTimestamp) / ONE_DAY;
-        daysSinceFirstLogEntry++;
-        long startTime = firstLogEntryTimestamp + daysSinceFirstLogEntry * ONE_DAY;
 
-        Intent intent = new Intent(context, LoggerService.class);
-        intent.putExtra(LoggerService.SCHEDULED_SERVICE_CALL, true);
-        PendingIntent pintent = PendingIntent.getService(context, 0, intent, 0);
+	void upload() {
+		dispatcher.dispatch(context);
+	}
 
-        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.set(AlarmManager.RTC, startTime, pintent);
-    }
+	void clearDb() {
+		logDb.open();
+		logDb.dropAll();
+		logDb.close();
+	}
 
+	void scheduleNextAutomaticCheck() {
+		logDb.open();
+		long firstLogEntryTimestamp = logDb.getOldestTimeStamp();
+		logDb.close();
+		long now = System.currentTimeMillis();
+		long daysSinceFirstLogEntry = (now - firstLogEntryTimestamp) / ONE_DAY;
+		daysSinceFirstLogEntry++;
+		long startTime = firstLogEntryTimestamp + daysSinceFirstLogEntry
+				* ONE_DAY;
+
+		Intent intent = new Intent(context, LoggerService.class);
+		intent.putExtra(LoggerService.SCHEDULED_SERVICE_CALL, true);
+		PendingIntent pintent = PendingIntent.getService(context, 0, intent, 0);
+
+		AlarmManager alarm = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+		alarm.set(AlarmManager.RTC, startTime, pintent);
+	}
 
 }
