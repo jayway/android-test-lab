@@ -11,12 +11,12 @@ The goal of this exercise is to try out TDD and pair programing. This will be do
 
 The problem that you will work on to get the exercise going is generaly known as Fizz-Buzz, a short description of Fizz-Buzz can be found below.
 
-Fizz-Buzz:  
-For n in the range 1 to 99:  
-if n is dividable by 3 and 5: return with 'FizzBuzz'  
-else if n is dividable by 3: return with 'Fizz'  
-else if n is dividable by 5: return with 'Buzz'  
-else return n  
+Fizz-Buzz:
+For n in the range 1 to 99:
+if n is dividable by 3 and 5: return with 'FizzBuzz'
+else if n is dividable by 3: return with 'Fizz'
+else if n is dividable by 5: return with 'Buzz'
+else return n
 
 We want you to implement the following interface:
 
@@ -35,6 +35,10 @@ The goal of this exercise is to write tests to validate the scheduling algorithm
 2. If less than a day has passed since the first log entry was written to the database, schedule the service to be restarted 24 hours after the timestamp of that log entry, then exit.
 3. If we are on wifi, send the log entries to the server, then exit.
 4. Otherwise, wipe the database and exit.
+
+These steps are illustrated in the following flowchart:
+
+![Flow chart](flow-chart.png)
 
 Suggested steps for a solution:
 
